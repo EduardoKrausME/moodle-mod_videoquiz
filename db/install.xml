@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/videoquiz/db" VERSION="20260920" COMMENT="XMLDB file for mod_videoquiz"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+    <TABLES>
+        <TABLE NAME="videoquiz" COMMENT="Video Quiz activity configuration">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="videosource" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="upload" SEQUENCE="false"/>
+                <FIELD NAME="videourl" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="resumeplayback" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="allowseek" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="maxplaybackrate" TYPE="number" LENGTH="4" DECIMALS="2" NOTNULL="true" DEFAULT="2"
+                       SEQUENCE="false"/>
+                <FIELD NAME="disabledownload" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="disablecontextmenu" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="grade" TYPE="number" LENGTH="10" DECIMALS="2" NOTNULL="true" DEFAULT="100"
+                       SEQUENCE="false"/>
+                <FIELD NAME="grademode" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="questions" SEQUENCE="false"/>
+                <FIELD NAME="questionweight" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="50" SEQUENCE="false"/>
+                <FIELD NAME="mingrade" TYPE="number" LENGTH="6" DECIMALS="2" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="completionwatch" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="completionpercent" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="80" SEQUENCE="false"/>
+                <FIELD NAME="completionquestions" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="completiongrade" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="videoquiz_questions" COMMENT="Questions attached to points on the video timeline">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="videoquizid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="timepoint" TYPE="number" LENGTH="12" DECIMALS="3" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="qtype" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="multichoice" SEQUENCE="false"/>
+                <FIELD NAME="questiontext" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="required" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="attemptsallowed" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="allowchange" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="correctfeedback" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="incorrectfeedback" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="points" TYPE="number" LENGTH="10" DECIMALS="2" NOTNULL="true" DEFAULT="1"
+                       SEQUENCE="false"/>
+                <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="activity" TYPE="foreign" FIELDS="videoquizid" REFTABLE="videoquiz" REFFIELDS="id"/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="activity-time" UNIQUE="false" FIELDS="videoquizid,timepoint"/>
+            </INDEXES>
+        </TABLE>
+        <TABLE NAME="videoquiz_options" COMMENT="Answer options or accepted short answers">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="answertext" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="iscorrect" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="question" TYPE="foreign" FIELDS="questionid" REFTABLE="videoquiz_questions" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="videoquiz_attempts" COMMENT="Student answers to video questions">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="videoquizid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="attemptno" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="response" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="fraction" TYPE="number" LENGTH="6" DECIMALS="4" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="correct" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="activity" TYPE="foreign" FIELDS="videoquizid" REFTABLE="videoquiz" REFFIELDS="id"/>
+                <KEY NAME="question" TYPE="foreign" FIELDS="questionid" REFTABLE="videoquiz_questions" REFFIELDS="id"/>
+                <KEY NAME="user" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="question-user" UNIQUE="false" FIELDS="questionid,userid"/>
+                <INDEX NAME="activity-user" UNIQUE="false" FIELDS="videoquizid,userid"/>
+            </INDEXES>
+        </TABLE>
+        <TABLE NAME="videoquiz_progress" COMMENT="Per-user watched progress and calculated grade">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="videoquizid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="duration" TYPE="number" LENGTH="12" DECIMALS="3" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="lastposition" TYPE="number" LENGTH="12" DECIMALS="3" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="uniquewatched" TYPE="number" LENGTH="14" DECIMALS="3" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="totalwatchtime" TYPE="number" LENGTH="14" DECIMALS="3" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="percent" TYPE="number" LENGTH="6" DECIMALS="2" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="watchedsegments" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="score" TYPE="number" LENGTH="6" DECIMALS="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="completed" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="activity" TYPE="foreign" FIELDS="videoquizid" REFTABLE="videoquiz" REFFIELDS="id"/>
+                <KEY NAME="user" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="activity-user" UNIQUE="true" FIELDS="videoquizid,userid"/>
+                <INDEX NAME="activity-percent" UNIQUE="false" FIELDS="videoquizid,percent"/>
+            </INDEXES>
+        </TABLE>
+        <TABLE NAME="videoquiz_sessions" COMMENT="Playback sessions used to validate tracking heartbeats">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="videoquizid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="sessionkey" TYPE="char" LENGTH="64" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="timestart" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timeend" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="watchtime" TYPE="number" LENGTH="14" DECIMALS="3" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="lastposition" TYPE="number" LENGTH="12" DECIMALS="3" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="sequence" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="lastheartbeat" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="lastclienttime" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="playerstate" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="paused" SEQUENCE="false"/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="activity" TYPE="foreign" FIELDS="videoquizid" REFTABLE="videoquiz" REFFIELDS="id"/>
+                <KEY NAME="user" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="activity-user-session" UNIQUE="true" FIELDS="videoquizid,userid,sessionkey"/>
+                <INDEX NAME="activity-user" UNIQUE="false" FIELDS="videoquizid,userid"/>
+            </INDEXES>
+        </TABLE>
+    </TABLES>
+</XMLDB>
