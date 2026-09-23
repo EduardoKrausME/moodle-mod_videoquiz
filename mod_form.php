@@ -44,7 +44,7 @@ class mod_videoquiz_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $this->standard_intro_elements();
 
-        $mform->addElement('header', 'sourceheader', get_string('sourceheader', 'videoquiz'));
+        $mform->addElement('html', '<h3>' . get_string('sourceheader', 'videoquiz') . '</h3>');
         $mform->addElement('select', 'videosource', get_string('videosource', 'videoquiz'), [
             'upload' => get_string('sourceupload', 'videoquiz'),
             'url' => get_string('sourceurl', 'videoquiz'),
@@ -55,7 +55,6 @@ class mod_videoquiz_mod_form extends moodleform_mod {
 
         $mform->addElement('filemanager', 'videofile', get_string('videofile', 'videoquiz'), null, [
             'subdirs' => 0,
-            'maxfiles' => 1,
             'accepted_types' => ['video'],
         ]);
         $mform->hideIf('videofile', 'videosource', 'neq', 'upload');
@@ -66,7 +65,6 @@ class mod_videoquiz_mod_form extends moodleform_mod {
 
         $mform->addElement('filemanager', 'poster', get_string('poster', 'videoquiz'), null, [
             'subdirs' => 0,
-            'maxfiles' => 1,
             'accepted_types' => ['image'],
         ]);
         $mform->addElement('filemanager', 'captions', get_string('captions', 'videoquiz'), null, [
@@ -75,7 +73,7 @@ class mod_videoquiz_mod_form extends moodleform_mod {
             'accepted_types' => ['.vtt'],
         ]);
 
-        $mform->addElement('header', 'playbackheader', get_string('playbackheader', 'videoquiz'));
+        $mform->addElement('html', '<h3>' . get_string('playbackheader', 'videoquiz') . '</h3>');
         $mform->addElement('select', 'resumeplayback', get_string('resumeplayback', 'videoquiz'), [
             1 => get_string('resumeautomatic', 'videoquiz'),
             2 => get_string('resumeask', 'videoquiz'),
@@ -93,7 +91,7 @@ class mod_videoquiz_mod_form extends moodleform_mod {
         $mform->addElement('selectyesno', 'disablecontextmenu', get_string('disablecontextmenu', 'videoquiz'));
         $mform->setDefault('disablecontextmenu', 0);
 
-        $mform->addElement('header', 'gradingheader', get_string('gradingheader', 'videoquiz'));
+        $mform->addElement('html', '<h3>' . get_string('gradingheader', 'videoquiz') . '</h3>');
         $mform->addElement('text', 'grade', get_string('maxgrade', 'videoquiz'), ['size' => 6]);
         $mform->setType('grade', PARAM_FLOAT);
         $mform->setDefault('grade', 100);
@@ -138,6 +136,15 @@ class mod_videoquiz_mod_form extends moodleform_mod {
         $percentfield = $this->suffix('completionpercent');
         if (isset($data[$percentfield]) && ((int)$data[$percentfield] < 1 || (int)$data[$percentfield] > 100)) {
             $errors[$percentfield] = get_string('errorpercent', 'videoquiz');
+        }
+        foreach (['videofile', 'poster'] as $field) {
+            $draftid = (int)($data[$field] ?? 0);
+            if ($draftid > 0) {
+                $draftinfo = file_get_draft_area_info($draftid);
+                if ((int)$draftinfo['filecount'] > 1) {
+                    $errors[$field] = get_string('errormaxfiles', 'videoquiz');
+                }
+            }
         }
         return $errors;
     }

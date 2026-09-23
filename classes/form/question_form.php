@@ -76,7 +76,7 @@ class question_form extends moodleform {
             get_string('incorrectfeedback', 'videoquiz'), ['rows' => 2, 'cols' => 70]);
         $mform->setType('incorrectfeedback', PARAM_TEXT);
 
-        $mform->addElement('header', 'choiceanswers', get_string('answers', 'videoquiz'));
+        $mform->addElement('html', '<h3>' . get_string('answers', 'videoquiz') . '</h3>');
         for ($i = 1; $i <= 6; $i++) {
             $group = [];
             $group[] = $mform->createElement('text', 'answer' . $i, get_string('answer', 'videoquiz'), ['size' => 55]);
