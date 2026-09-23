@@ -86,3 +86,9 @@
         padding: 1rem;
     }
 }
+/* Let the primary player use the full activity content width. */
+.videoquiz__stage {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+}
