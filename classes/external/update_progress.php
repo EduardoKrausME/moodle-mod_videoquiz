@@ -71,8 +71,8 @@ class update_progress extends external_api {
      * @param string $playerstate Player state.
      * @return array
      */
-    public static function execute(int    $cmid, float $currentposition, float $duration, float $segmentstart,
-                                   float  $segmentend, float $playbackrate, int $sequence, string $sessionkey, int $clienttime,
+    public static function execute(int $cmid, float $currentposition, float $duration, float $segmentstart,
+                                   float $segmentend, float $playbackrate, int $sequence, string $sessionkey, int $clienttime,
                                    string $playerstate): array {
         global $DB, $USER;
 
