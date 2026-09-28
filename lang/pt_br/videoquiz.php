@@ -143,7 +143,6 @@ $string['unlimited'] = 'Ilimitadas';
 $string['videofile'] = 'Arquivo de vídeo';
 $string['videoquiz:addinstance'] = 'Adicionar um novo Video Quiz';
 $string['videoquiz:managequestions'] = 'Gerenciar perguntas do Video Quiz';
-$string['videoquiz:resetattempts'] = 'Redefinir tentativas do Video Quiz';
 $string['videoquiz:view'] = 'Visualizar Video Quiz';
 $string['videoquiz:viewreport'] = 'Visualizar relatórios do Video Quiz';
 $string['videoquizname'] = 'Nome do Video Quiz';
