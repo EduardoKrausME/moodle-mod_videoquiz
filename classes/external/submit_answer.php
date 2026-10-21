@@ -145,9 +145,9 @@ class submit_answer extends external_api {
                 throw new invalid_parameter_exception(get_string('invalidanswer', 'videoquiz'));
             }
             $answer = trim((string)$response);
-            $normal = \core_text::strtolower($answer);
+            $normal = strtolower($answer);
             foreach ($options as $option) {
-                if (!empty($option->iscorrect) && \core_text::strtolower(trim((string)$option->answertext)) === $normal) {
+                if (!empty($option->iscorrect) && strtolower(trim((string)$option->answertext)) === $normal) {
                     return [1.0, $answer];
                 }
             }
