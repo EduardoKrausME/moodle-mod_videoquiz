@@ -20,10 +20,6 @@ This plugin was designed using concepts and reusable patterns from `moodle-mod_v
 especially player configuration, resume behavior, watched-segment tracking, gradebook integration and completion
 concepts.
 
-## Installation
-
-Copy the `videoquiz` directory to `mod/videoquiz` and visit Site administration > Notifications.
-
 ## License
 
 GNU GPL v3 or later.
